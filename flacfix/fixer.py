@@ -9,35 +9,36 @@ CORRECTION_MS = 2_000
 
 
 def do_fix_flac_files():
-    root_folder = read_root_folder()
+    root_folder = _read_root_folder()
     if not root_folder:
         print("No root folder selected, exiting")
         exit(-1)
     os.makedirs(root_folder + "_fixed", exist_ok=True)
-    process(root_folder, root_folder)
+    _process(root_folder, root_folder)
 
-def read_root_folder():
+
+def _read_root_folder():
     root = Tk()
     root.withdraw()
     return askdirectory(initialdir="/home/zsolt/audio-test/")
 
 
-def process(root, path):
-    for s in subdirectories(path):
-        process(root, s)
-        fix_input_folder(root, s)
+def _process(root, path):
+    for s in _subdirectories(path):
+        _process(root, s)
+        _fix_input_folder(root, s)
 
 
-def subdirectories(path):
+def _subdirectories(path):
     """Yield directory names not starting with '.' under given path."""
     for entry in os.scandir(path):
         if not entry.name.startswith('.') and entry.is_dir():
             yield path + "/" + entry.name
 
 
-def fix_input_folder(root_folder, input_folder):
+def _fix_input_folder(root_folder, input_folder):
     flac_files = sorted(glob.glob(input_folder + "/*.flac"))
-    durations, merged_audio = merge_flac_files(flac_files)
+    durations, merged_audio = _merge_flac_files(flac_files)
     print(f"Input_folder: {input_folder}, sum of durations: {len(merged_audio)} ms")
 
     segment_start = 0
@@ -51,7 +52,7 @@ def fix_input_folder(root_folder, input_folder):
         segment_start = segment_end
 
 
-def merge_flac_files(flac_files):
+def _merge_flac_files(flac_files):
     durations = {}
     merged_audio = AudioSegment.empty()
     for file in flac_files:
@@ -60,5 +61,3 @@ def merge_flac_files(flac_files):
         print(f"Input file: {file}, duration: {durations[file]} ms")
         merged_audio += audio
     return durations, merged_audio
-
-
