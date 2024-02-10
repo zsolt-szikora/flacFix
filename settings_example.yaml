@@ -1,0 +1,11 @@
+correction_ms: 2000
+shorten_last_flac: false
+
+root_folder: "/home/zsolt/Documents/moka"
+
+# All folders MUST be under root
+folder_groups:
+  - - "/home/zsolt/Documents/moka/artist1/album1"
+    - "/home/zsolt/Documents/moka/artist1/album2"
+
+  - - "/home/zsolt/Documents/moka/artist2/album2"
